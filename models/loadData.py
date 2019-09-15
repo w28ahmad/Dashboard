@@ -50,3 +50,7 @@ def load_data(data_source):
     # Sort the DataFrame by its Date
     df = df.sort_values("Date")
     return df
+
+
+def print_data(DF):
+    print(DF.head(5))

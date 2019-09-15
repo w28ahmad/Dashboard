@@ -1,12 +1,9 @@
-from usedImports import plt, np
+from usedImports import np
 # import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 from SeqDataGenerator import DataGeneratorSeq as dataGenerator
-from loadData import load_data
-
-
-def print_data(DF):
-    print(DF.head(5))
+from loadData import load_data, print_data
+from graphs import compare_graphs, visualize
 
 # ? Scale the data between 0 and 1
 
@@ -32,17 +29,6 @@ def normalizer(train_data, test_data):
     train_data = train_data.reshape(-1)
     test_data = scaler.transform(test_data).reshape(-1)
     return (train_data, test_data)
-
-# ? Create a plot of the data
-
-
-def visualize(df):
-    plt.figure(figsize=(18, 9))
-    plt.plot(range(df.shape[0]), (df["Low"]+df["High"])/2)
-    plt.xticks(range(0, df.shape[0], 500), df["Date"].loc[::500], rotation=45)
-    plt.xlabel("Date", fontsize=18)
-    plt.ylabel("MidPrice", fontsize=18)
-    plt.show()
 
 
 def exponential_moving_average(train_data):
@@ -73,19 +59,6 @@ def standard_average_prediction(df, train_data):
 
     print("MSE error for standard averageing: %.5f" % (0.5*np.mean(mse_error)))
     return(std_ave_x, std_average_predictions, range(window_size, N))
-
-# ? Compare 2 graphs
-
-
-def compare_graphs(dataA, rangeA, labelA, dataB, rangeB, labelB, xlabel, ylabel):
-    plt.figure(figsize=(18, 9))
-    plt.plot(rangeA, dataA, color='b', label=labelA)
-    plt.plot(rangeB, dataB, color='orange', label=labelB)
-
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.legend(fontsize=18)
-    plt.show()
 
 # ? Exponential average prediction
 
