@@ -1,13 +1,11 @@
-from pandas_datareader import data
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+from usedImports import data, plt, np, pd
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 import os
 import urllib.request
 import json
 import datetime as dt
+import SeqDataGenerator.DataGeneratorSeq as dataGenerator
 
 
 def load_data(data_source):
@@ -60,7 +58,7 @@ def load_data(data_source):
 def print_data(DF):
     print(DF.head(5))
 
-# Scale the data between 0 and 1
+# ? Scale the data between 0 and 1
 
 
 def normalizer(train_data, test_data):
@@ -77,7 +75,7 @@ def normalizer(train_data, test_data):
             train_data[di:di+smoothing_window_size,
                        :] = scaler.transform(train_data[di:di+smoothing_window_size, :])
 
-    # You normalize the last bit of remaining data
+    # ? You normalize the last bit of remaining data, never seems to happen
     # scaler.fit(train_data[di+smoothing_window_size:,:])
     # train_data[di+smoothing_window_size:,:] = scaler.transform(train_data[di+smoothing_window_size:,:])
 
@@ -85,7 +83,7 @@ def normalizer(train_data, test_data):
     test_data = scaler.transform(test_data).reshape(-1)
     return (train_data, test_data)
 
-# Create a plot of the data
+# ? Create a plot of the data
 
 
 def visualize(df):
@@ -126,7 +124,7 @@ def standard_average_prediction(df, train_data):
     print("MSE error for standard averageing: %.5f" % (0.5*np.mean(mse_error)))
     return(std_ave_x, std_average_predictions, range(window_size, N))
 
-# Compare 2 graphs
+# ? Compare 2 graphs
 
 
 def compare_graphs(dataA, rangeA, labelA, dataB, rangeB, labelB, xlabel, ylabel):
@@ -139,11 +137,11 @@ def compare_graphs(dataA, rangeA, labelA, dataB, rangeB, labelB, xlabel, ylabel)
     plt.legend(fontsize=18)
     plt.show()
 
-# Exponential average prediction
+# ? Exponential average prediction
 
 
 def exponential_prediction(train_data):
-    window_size = 100
+    # window_size = 100
     N = train_data.size
 
     avg_predicted_value = []
@@ -172,27 +170,27 @@ if __name__ == "__main__":
     # print_data(df)
     # visualize(df)
 
-    # Train Test Split
+    # ? Train Test Split
     high_prices = df.loc[:, "High"].values
     low_prices = df.loc[:, "Low"].values
     mid_prices = (high_prices+low_prices)/2
 
-    # Split the train test split with a 50:50 ratio
+    # ? Split the train test split with a 50:50 ratio
     train_data = mid_prices[:1600]
     test_data = mid_prices[1600:]
 
-    # Normalize and smooth the data
+    # ? Normalize and smooth the data
     train_data, test_data = normalizer(train_data, test_data)
     train_data = exponential_moving_average(train_data)
 
-    # For visualization
+    # ? For visualization
     all_mid_data = np.concatenate([train_data, test_data], axis=0)
 
-    # Standard_average_predictions
+    # ? Standard_average_predictions
     # dates, predictions, predict_range = standard_average_prediction(df, train_data)
     # compare_graphs(all_mid_data, range(df.shape[0]), "True", predictions, predict_range, "Prediction", "Date", "Mid Price")
 
-    # Exponential_average_predictions
+    # ? Exponential_average_predictions
     # predictions, predict_range = exponential_prediction(all_mid_data)
     # print(len(predictions),len(predict_range))
     # compare_graphs(all_mid_data, range(df.shape[0]), "True", predictions, predict_range, "Prediction", "Date", "Mid Price")

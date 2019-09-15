@@ -2,6 +2,6 @@ app.py~
 env
 .vscode
 run
-
+models/__pycache__/
 # Kaggle link -- 
 Data
