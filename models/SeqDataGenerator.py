@@ -12,7 +12,7 @@ class DataGeneratorSeq(object):
         self._cursor = [
             offset * self._segments for offset in range(self._batch_size)]
         #! 0 319 638 ...
-        print(self._cursor)
+        # print(self._cursor)
 
     '''
         batch_data      -- Input data x of size batch_size, equally selected from the mid_prices
@@ -59,4 +59,4 @@ class DataGeneratorSeq(object):
             self._cursor[b] = np.random.randint(
                 0, min((b+1)*self._segments, self._price_length-1))
 
-        print(self._cursor)
+        # print(self._cursor)

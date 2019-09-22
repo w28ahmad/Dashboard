@@ -3,5 +3,13 @@ env
 .vscode
 run
 models/__pycache__/
+#temporary pickle storage
+picklefiles
+test
+models/test.py
 # Kaggle link -- 
 Data
+
+#random files
+utils/__pycache__/__init__.cpython-36.pyc
+utils/__pycache__/pickleUtils.cpython-36.pyc
