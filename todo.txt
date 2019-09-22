@@ -1,0 +1,12 @@
+Todo:
+    continous visualization of streamed data through a web graph
+    Continous stock streaming into a db or a program
+    investigate why there is a y offset between the prediction and the actual y-values
+    test the lstm model on more and larger datasets
+        - (try fake datasets with generated numbers)
+
+    understand the lstm model better
+    flask-web app able to search for your desired stock from a search bar.
+    text classification (stock sentiment analysis)
+
+Done:

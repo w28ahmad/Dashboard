@@ -258,7 +258,7 @@ def LSTM_model(D, batch_size, num_unrollings, num_nodes, n_layers, dropout, all_
     epochs = 30
     valid_summary = 1  # Interval you make the test predictions
 
-    n_predict_once = 50  # Number of steps you continously want to predict for
+    n_predict_once = 5  # Number of steps you continously want to predict for
     train_seq_length = train_data.size  # the full size of training the data
 
     train_mse_ot = []  # Accumulate train losses
@@ -283,7 +283,7 @@ def LSTM_model(D, batch_size, num_unrollings, num_nodes, n_layers, dropout, all_
     x_axis_seq = []
 
     # Points you start your test predictions
-    test_points_seq = np.arange(2900, 3200, 50).tolist()
+    test_points_seq = np.arange(3000, 3200, 5).tolist()
 
     for ep in range(epochs):
 
@@ -398,17 +398,35 @@ def LSTM_model(D, batch_size, num_unrollings, num_nodes, n_layers, dropout, all_
 
     write_pickle_file("lstm.pkl", [predictions_over_time, x_axis_seq, best_prediction_epoch], "picklefiles")
 
-def visualize_predictions(predictions_over_time, x_axis_seq, best_prediction_epoch):
-    plt.figure(figsize=(18, 18))
-    plt.plot(range(df.shape[0]), all_mid_data, color='b')
-    for xval, yval in zip(x_axis_seq, predictions_over_time[best_prediction_epoch]):
-        plt.plot(xval, yval, color='r')
+def visualize_predictions(df, all_mid_data, predictions_over_time, x_axis_seq, best_prediction_epoch):
+    plt.figure(figsize = (18,18))
+    # plt.subplot(2,1,1)
+    # plt.plot(range(df.shape[0]),all_mid_data,color='b')
 
-    plt.title('Best Test Predictions Over Time', fontsize=18)
-    plt.xlabel('Date', fontsize=18)
-    plt.ylabel('Mid Price', fontsize=18)
-    plt.xlim(2800, 3250)
-    plt.ylim(1.5, 2.2)
+    # # Plotting how the predictions change over time
+    # # Plot older predictions with low alpha and newer predictions with high alpha
+    # start_alpha = 0.25
+    # alpha  = np.arange(start_alpha,1.1,(1.0-start_alpha)/len(predictions_over_time[::3]))
+    # for p_i,p in enumerate(predictions_over_time[::3]):
+    #     for xval,yval in zip(x_axis_seq,p):
+    #         plt.plot(xval,yval,color='r',alpha=alpha[p_i])
+
+    # plt.title('Evolution of Test Predictions Over Time',fontsize=18)
+    # plt.xlabel('Date',fontsize=18)
+    # plt.ylabel('Mid Price',fontsize=18)
+    # plt.xlim(11000,12500)
+
+    # plt.subplot(2,1,2)
+
+    # Predicting the best test prediction you got
+    plt.plot(range(df.shape[0]),all_mid_data,color='b')
+    for xval,yval in zip(x_axis_seq,predictions_over_time[best_prediction_epoch]):
+        plt.plot(xval,yval,color='r')
+
+    plt.title('Best Test Predictions Over Time',fontsize=18)
+    plt.xlabel('Date',fontsize=18)
+    plt.ylabel('Mid Price',fontsize=18)
+    plt.xlim(3000,3250)
     plt.show()
 
 
@@ -467,9 +485,9 @@ if __name__ == "__main__":
     tf.reset_default_graph()
 
     # ? Run the LSTM model
-    LSTM_model(D, batch_size, num_unrollings,
-               num_nodes, n_layers, dropout, all_mid_data)
+    # LSTM_model(D, batch_size, num_unrollings,
+    #            num_nodes, n_layers, dropout, all_mid_data)
 
     # ? Graphing the predictions
-    # predictions_over_time, x_axis_seq, best_prediction_epoch = read_pickle_file("lstm.pkl", "picklefiles")
-    # visualize_predictions(predictions_over_time, x_axis_seq, best_prediction_epoch)
+    predictions_over_time, x_axis_seq, best_prediction_epoch = read_pickle_file("lstm.pkl", "picklefiles")
+    visualize_predictions(df, all_mid_data,predictions_over_time, x_axis_seq, best_prediction_epoch)
