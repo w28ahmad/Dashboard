@@ -1,20 +1,45 @@
-from flask import Flask, render_template
+import sys, os
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 
-app = Flask(__name__)
+BASEDIR = os.getcwd()
+sys.path.append(BASEDIR)
+from utils.load_data import stock_data
 
-@app.route('/')
-def index():
-    return render_template('index.html', name="Wahab")
+start = '2017-04-22'
+end = '2018-04-22'
+name = "AMZN"
+df = stock_data(start, end, name, BASEDIR)
+df["Mid-Values"] = (df["High"]+df["Low"])/2
+df.reset_index(inplace=True)
 
-@app.route('/login/<username>')
-def login(username):
-    return f"The username of the user is: {username}"
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-@app.route('/post/<int:postId>')
-def post(postId):
-    return f"Your post Id is: {postId}"
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+app.layout = html.Div(children=[
+    html.H1(children='Stock Analysis'),
 
-if __name__ == "__main__":
-    app.run(debug=True)
-         
+    dcc.Input(
+        placeholder='Enter a value...',
+        type='text',
+        value=''
+    ),
+
+    dcc.Graph(
+        id='example-graph',
+        figure={
+            'data': [
+                {'x': df["Date"], 'y': df["Mid-Values"], 'type': 'line', 'name': name},
+                # {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'line', 'name': u'Montréal'},
+            ],
+            'layout': {
+                'title': f'Stock Prices for {name}'
+            }
+        }
+    )
+])
+
+if __name__ == '__main__':
+    app.run_server(debug=True)

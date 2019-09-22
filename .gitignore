@@ -11,5 +11,6 @@ models/test.py
 Data
 
 #random files
-utils/__pycache__/__init__.cpython-36.pyc
-utils/__pycache__/pickleUtils.cpython-36.pyc
+utils/__pycache__
+
+.env
