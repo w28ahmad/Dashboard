@@ -6,7 +6,7 @@ from SeqDataGenerator import DataGeneratorSeq as dataGenerator
 from loadData import load_data, print_data
 from graphs import compare_graphs, visualize
 
-sys.path.append(os.path.abspath(os.path.join('..', 'webapp')))
+# sys.path.append(os.path.abspath(os.path.join('..', 'webapp')))
 from utils.pickleUtils import write_pickle_file, read_pickle_file
 # ? Scale the data between 0 and 1
 
@@ -431,7 +431,7 @@ def visualize_predictions(df, all_mid_data, predictions_over_time, x_axis_seq, b
 
 
 if __name__ == "__main__":
-    data_source = "kaggle"  # kaggle or alphavantage
+    data_source = "alphavantage"  # kaggle or alphavantage
     df = load_data(data_source)
     # print_data(df)
     # visualize(df)

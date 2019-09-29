@@ -1,5 +1,6 @@
 Todo:
-    continous visualization of streamed data through a web graph
+    Get the model running on docker
+    Integrate dash app with flask
     Continous stock streaming into a db or a program
     investigate why there is a y offset between the prediction and the actual y-values
     test the lstm model on more and larger datasets
@@ -10,3 +11,4 @@ Todo:
     text classification (stock sentiment analysis)
 
 Done:
+    continous visualization of streamed data through a web graph--> dash
