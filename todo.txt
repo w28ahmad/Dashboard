@@ -1,6 +1,6 @@
 Todo:
+    Create a login Page with mongoD
     Get the model running on docker
-    Integrate dash app with flask
     Continous stock streaming into a db or a program
     investigate why there is a y offset between the prediction and the actual y-values
     test the lstm model on more and larger datasets
@@ -12,3 +12,5 @@ Todo:
 
 Done:
     continous visualization of streamed data through a web graph--> dash
+    Integrate dash app with flask
+    login page html/css

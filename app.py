@@ -1,19 +1,35 @@
 import sys, os
 import pandas as pd
+from flask import Flask, redirect
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
+# Blueprints
+from login import login_api
+
 BASEDIR = os.getcwd()
 sys.path.append(BASEDIR)
 from utils.load_data import stock_data
 
+# Configuring flask
+server = Flask(__name__)
+server.register_blueprint(login_api, url_prefix='/login')
+
+@server.route('/')
+def goto_login():
+    return redirect('/login')
+
+# Defaults empty dataFrame for Initial values 
 name = ""
 df = pd.DataFrame(columns=["Mid-Values", "Date"])
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+# Creating a Dash app
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server, url_base_pathname='/dashboard/')
 
 app.layout = html.Div(children=[
     html.H1(children='Stock Analysis'),

@@ -1,0 +1,34 @@
+Looking for git in: git
+Using git 2.17.1 from git
+> git rev-parse --show-toplevel
+> git rev-parse --git-dir
+> git config --get commit.template
+Open repository: /home/wahab/Documents/Python-Projects/python_notes/webapp
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse master
+> git rev-parse --symbolic-full-name master@{u}
+fatal: no upstream configured for branch 'master'
+> git for-each-ref --format %(refname) %(objectname) --sort -committerdate
+> git remote --verbose
+> git check-ignore -v -z --stdin
+> git check-ignore -v -z --stdin
+> git show :static/css/layout.css
+> git check-ignore -v -z --stdin
+> git show :templates/login.html
+> git ls-files --stage -- templates/
+> git show :static/css/layout.css
+> git show :templates/login.html
+> git ls-files --stage -- templates/
+> git show :static/css/layout.css
+> git show :templates/login.html
+> git ls-files --stage -- templates/
+> git show :static/css/layout.css
+> git show :templates/login.html
+> git ls-files --stage -- templates/
+> git show :static/css/layout.css
+> git show :templates/login.html
+> git ls-files --stage -- templates/
+> git show :static/css/layout.css
+> git show :templates/login.html
+> git ls-files --stage -- templates/
