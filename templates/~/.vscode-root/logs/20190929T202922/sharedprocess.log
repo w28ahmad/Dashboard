@@ -1,8 +1,0 @@
-[2019-09-29 20:29:27.696] [sharedprocess] [info] main {"machineId":"35f12ac3ae713ab3ab630534bdbf178af2402e6a431f13f8bd65338b51d466e1"}
-[2019-09-29 20:30:07.690] [sharedprocess] [info] Starting to clean up unused language packs.
-[2019-09-29 20:31:17.664] [sharedprocess] [info] Installing extension: hookyqr.beautify
-[2019-09-29 20:31:20.088] [sharedprocess] [info] Downloaded extension: hookyqr.beautify /tmp/fc5c1150-c155-4a1f-88b6-492eaadf9323
-[2019-09-29 20:31:20.485] [sharedprocess] [info] Extracted extension to /root/.vscode/extensions/.hookyqr.beautify-1.5.0: hookyqr.beautify
-[2019-09-29 20:31:20.485] [sharedprocess] [info] Renamed to /root/.vscode/extensions/hookyqr.beautify-1.5.0
-[2019-09-29 20:31:20.487] [sharedprocess] [info] Installation completed. hookyqr.beautify
-[2019-09-29 20:31:20.839] [sharedprocess] [info] Extensions installed successfully: hookyqr.beautify
