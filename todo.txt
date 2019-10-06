@@ -1,17 +1,39 @@
 Todo:
-    git issue cant commit https://stackoverflow.com/questions/10340581/trouble-setting-up-tower-with-my-github-account-error-could-not-lock-config-f/10502155#10502155
-    Create a login Page with mongoD
+    find a way to import models to blueprints without having a circular import
+
     Get the model running on docker
+
     Continous stock streaming into a db or a program
+
     investigate why there is a y offset between the prediction and the actual y-values
+
     test the lstm model on more and larger datasets
+
         - (try fake datasets with generated numbers)
 
+
+
     understand the lstm model better
+
     flask-web app able to search for your desired stock from a search bar.
+
     text classification (stock sentiment analysis)
 
+
+
 Done:
+    Create a login Page with mongoD
+
+    Get the flask app running on docker
+
     continous visualization of streamed data through a web graph--> dash
+
     Integrate dash app with flask
+
     login page html/css
+
+
+Commands:
+    docker build -t app:latest .
+    docker run -d -p 5000:5000 app:latest
+

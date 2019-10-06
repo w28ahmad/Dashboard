@@ -1,22 +1,37 @@
 import sys, os
 import pandas as pd
 from flask import Flask, redirect
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-# Blueprints
-from login import login_api
-
 BASEDIR = os.getcwd()
 sys.path.append(BASEDIR)
 from utils.load_data import stock_data
 
+#Environment Variables
+load_dotenv(os.path.join(BASEDIR, '.env'))
+SQLALCHEMY_USERNAME=os.getenv("SQLALCHEMY_USERNAME")
+SQLALCHEMY_PASSWORD=os.getenv("SQLALCHEMY_PASSWORD")
+
 # Configuring flask
 server = Flask(__name__)
+# server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{SQLALCHEMY_USERNAME}:{SQLALCHEMY_PASSWORD}@localhost/user'
+# db = SQLAlchemy(server)
+
+# db.create_all()
+# db.session.commit()
+
+# Blueprints
+from login import login_api
+
+#Register all the api blueprnts
 server.register_blueprint(login_api, url_prefix='/login')
+
 
 @server.route('/')
 def goto_login():
@@ -94,4 +109,4 @@ def new_df(name, start, end):
             }
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0')

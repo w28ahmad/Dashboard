@@ -1,4 +1,5 @@
 from flask import Blueprint, abort, render_template
+# from database import User
 
 login_api = Blueprint('login', __name__, template_folder="templates")
 
