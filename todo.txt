@@ -1,28 +1,28 @@
 Todo:
-    find a way to import models to blueprints without having a circular import
+    Train and test the LSTM model for stock future predictions
+
+    Implement sentament analysis using the twitter api
+
+    update the docker file to encorporate the new changes
 
     Get the model running on docker
 
     Continous stock streaming into a db or a program
 
-    investigate why there is a y offset between the prediction and the actual y-values
+    Research automated investing into stocks
 
-    test the lstm model on more and larger datasets
+    predicting when to swich to different stocks
 
-        - (try fake datasets with generated numbers)
-
-
-
-    understand the lstm model better
-
-    flask-web app able to search for your desired stock from a search bar.
-
-    text classification (stock sentiment analysis)
-
-
+    following multiple stocks
 
 Done:
-    Create a login Page with mongoD
+    flask-web app able to search for your desired stock from a search bar.
+
+    secure the login page and connect it to the dashboard
+
+    Create a login Page
+
+    find a way to import models to blueprints without having a circular import
 
     Get the flask app running on docker
 

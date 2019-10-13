@@ -1,8 +1,11 @@
 import sys, os
 import pandas as pd
-from flask import Flask, redirect
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+
+from flask import Flask, redirect, session
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_required, logout_user
 
 import dash
 import dash_core_components as dcc
@@ -17,14 +20,28 @@ from utils.load_data import stock_data
 load_dotenv(os.path.join(BASEDIR, '.env'))
 SQLALCHEMY_USERNAME=os.getenv("SQLALCHEMY_USERNAME")
 SQLALCHEMY_PASSWORD=os.getenv("SQLALCHEMY_PASSWORD")
+SECRET_KEY = os.getenv("LOGIN_MANAGER_SECRET_KEY")
 
 # Configuring flask
 server = Flask(__name__)
-# server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{SQLALCHEMY_USERNAME}:{SQLALCHEMY_PASSWORD}@localhost/user'
-# db = SQLAlchemy(server)
+server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{SQLALCHEMY_USERNAME}:{SQLALCHEMY_PASSWORD}@localhost/user'
+db = SQLAlchemy(server)
+bcrypt = Bcrypt(server)
 
-# db.create_all()
-# db.session.commit()
+    # Configure LoginManager
+from database import User    
+server.secret_key = SECRET_KEY
+login_manager = LoginManager()
+login_manager.init_app(server)
+
+# Connect users to their cookies
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+db.create_all()
+db.session.commit()
 
 # Blueprints
 from login import login_api
@@ -32,9 +49,18 @@ from login import login_api
 #Register all the api blueprnts
 server.register_blueprint(login_api, url_prefix='/login')
 
-
+# Login redirect
 @server.route('/')
 def goto_login():
+    return redirect('/login')
+
+# Route to logout
+# Remove all the cookies
+@server.route('/logout')
+@login_required
+def signout():
+    logout_user
+    session.clear() # BUG-FIX - One of the cookies still remains even after logout_user
     return redirect('/login')
 
 # Defaults empty dataFrame for Initial values 
@@ -45,6 +71,11 @@ df = pd.DataFrame(columns=["Mid-Values", "Date"])
 # Creating a Dash app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server, url_base_pathname='/dashboard/')
+
+# Add login_required to the dash page
+for view_func in server.view_functions:
+    if view_func.startswith('/dashboard/'):
+        server.view_functions[view_func] = login_required(server.view_functions[view_func])
 
 app.layout = html.Div(children=[
     html.H1(children='Stock Analysis'),
@@ -91,6 +122,7 @@ app.layout = html.Div(children=[
         Input(component_id="end_date", component_property='value')
     ]
 )
+# dynamicly updating the graph from the name, start-date and end-date
 def new_df(name, start, end):
     print(name, start, end)
     try:

@@ -16,3 +16,7 @@ __pycache__
 
 .env
 dbTest
+
+# Javascript//webpack//node
+node_modules
+package.json
