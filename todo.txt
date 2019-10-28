@@ -1,5 +1,12 @@
 Todo:
-    Train and test the LSTM model for stock future predictions
+    Create an lstm class:
+        - find a way to save the model
+
+    Optimize lstm model
+        # Conclusions the model works but all of the predictions are horrably off
+        # 1. Research about how to get more data from quandle
+        # 2. Research what Batch_size, Buffer_size and evaluation interval accomplish
+        # 3. Tweak the numbers to get the best results
 
     Implement sentament analysis using the twitter api
 
