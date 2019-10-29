@@ -1,4 +1,6 @@
 Todo:
+    Add the new lstm-feature branch to github
+
     Create an lstm class:
         - find a way to save the model
 

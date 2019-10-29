@@ -1,7 +1,9 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import os
 
 class uni_lstm:
     '''
@@ -23,13 +25,34 @@ class uni_lstm:
         self.BUFFER_SIZE = kwargs['BUFFER_SIZE'] if 'BUFFER_SIZE' in kwargs else 20
         self.EVALUATION_INTERVAL = kwargs['EVALUATION_INTERVAL'] if 'EVALUATION_INTERVAL' in kwargs else 5
         self.EPOCHS = kwargs['EPOCHS'] if 'EPOCHS' in kwargs else 200
+        filename = kwargs['filename'] if 'filename' in kwargs else None
         
         if 'seed' in kwargs:
             tf.random.set_seed(kwargs['seed'])
 
 
         if use_recent_model:
-            pass
+            # ! For testing only
+            # Normalize the data
+            self.normalize_data()
+            
+            # Create windows
+            univariate_past_history = kwargs['univariate_past_history'] if 'univariate_past_history' in kwargs else 20
+            univariate_future_target = kwargs['univariate_future_target'] if 'univariate_future_target' in kwargs else 0
+            
+            x_train, y_train = self.univariate_data(0, self.TRAIN_SPLIT, univariate_past_history, univariate_future_target) # Training
+            x_test, y_test = self.univariate_data(self.TRAIN_SPLIT, None, univariate_past_history, univariate_future_target) # Testing
+            
+            shape = x_train.shape[-2:]
+            
+            # Creating training slices and shuffling them
+            train_univariate = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+            self.train_univariate = train_univariate.cache().shuffle(self.BUFFER_SIZE).batch(self.BATCH_SIZE).repeat()
+
+            
+            self.load_model(filename)
+            self.predict(self.train_univariate)
+            
         
         else:
             # Normalize the data
@@ -59,21 +82,29 @@ class uni_lstm:
             self.train_model()
             
             # Save model
-            self.save_model()
+            self.save_model(filename,)
             
             
             
+    # Training the model
     def train_model(self):
-        # Training the model
         self.model.fit(self.train_univariate, epochs=self.EPOCHS,
                             steps_per_epoch=self.EVALUATION_INTERVAL,
                             validation_data=self.test_univariate, validation_steps=50)
     
-    def save_model(self):
-        pass
+    # Save the model to current dir
+    def save_model(self, filename):
+        if filename is None:
+            filename = 'model.h5'
+            
+        self.model.save(filename)
     
-    def load_model(self):
-        pass
+    # Load the model from the current directory
+    def load_model(self, filename):
+        if filename is None:
+            filename = 'model.h5'
+        
+        self.model = tf.keras.models.load_model(filename)
     
     def create_model(self, shape):
         model =  tf.keras.models.Sequential([
@@ -83,8 +114,16 @@ class uni_lstm:
         model.compile(optimizer='adam', loss='mae')
         return model
     
-    def predict(self):
+    # predict the future given some data
+    def predict(self, data=None):
         pass
+          
+        # For testing    
+        # for x, y in data.take(3):
+        #     plot = self.show_plot([x[0].numpy(), y[0].numpy(),
+        #                 self.model.predict(x)[0]], 0, 'Simple LSTM model')
+        #     plot.show()        
+
     
     def univariate_data(self, start_index, end_index, history_size, target_size):
         '''
@@ -115,7 +154,8 @@ class uni_lstm:
         data_std = self.data[:self.TRAIN_SPLIT].std()
         self.data = (self.data-data_mean)/data_std
     
-    def create_time_steps(length):
+    # For testing the model 
+    def create_time_steps(self,length):
         '''
         returns an array of numbers from -length to -1. i.e: create_timesteps(5) --> [-5, -4, -3, -2, -1]
         :param: length int: size of the timestep
@@ -125,7 +165,8 @@ class uni_lstm:
             time_steps.append(i)
         return time_steps
     
-    def show_plot(plot_data, delta, title):
+    # For creating quick custom plots
+    def show_plot(self,plot_data, delta, title):
         '''
         - Plots the target data (y) with the time steps (X).
         - If the size of plot_data list is bigger than 1, i.e 3, the 0th index is the history (acctual data)
@@ -138,7 +179,7 @@ class uni_lstm:
         '''
         labels = ['History', 'True Future', 'Model Prediction']
         marker = ['.-', 'rx', 'go']
-        time_steps = create_time_steps(plot_data[0].shape[0])
+        time_steps = self.create_time_steps(plot_data[0].shape[0])
         if delta:
             future = delta
         else:
@@ -174,14 +215,8 @@ if __name__ == '__main__':
     df = web.DataReader(name=name, data_source='quandl', start=start_date, end=end_date, access_key=os.getenv("quandle_key"))
     df['mid_data'] = (df['High']+df['Low'])/2
     
-    # BATCH_SIZE = 10
-    # BUFFER_SIZE = 20
-    # EVALUATION_INTERVAL = 5
-    # EPOCHS = 100
-    # TRAIN_SPLIT = 210
-    
     # Creating the LSTM class
-    lstm = uni_lstm(df['mid_data'].values, False,
+    lstm = uni_lstm(df['mid_data'].values, True,
                     TRAIN_SPLIT=210, EPOCHS=100,
                     BATCH_SIZE=10, BUFFER_SIZE=20,
                     EVALUATION_INTERVAL=5, seed=13, 
