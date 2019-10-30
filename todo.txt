@@ -1,8 +1,7 @@
 Todo:
-    Add the new lstm-feature branch to github
-
-    Create an lstm class:
-        - find a way to save the model
+    Find a way to abstract the dash app
+        usefull urls
+        - https://medium.com/@olegkomarov_77860/how-to-embed-a-dash-app-into-an-existing-flask-app-ea05d7a2210b
 
     Optimize lstm model
         # Conclusions the model works but all of the predictions are horrably off
@@ -25,6 +24,11 @@ Todo:
     following multiple stocks
 
 Done:
+    Add the new lstm-feature branch to github
+
+    Create an lstm class:
+        - find a way to save the model
+
     flask-web app able to search for your desired stock from a search bar.
 
     secure the login page and connect it to the dashboard
@@ -45,4 +49,6 @@ Done:
 Commands:
     docker build -t app:latest .
     docker run -d -p 5000:5000 app:latest
+
+    http://0.0.0.0:8050/login/
 

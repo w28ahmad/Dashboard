@@ -28,7 +28,7 @@ server.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{SQLALCHEMY_USERNAME}:{SQLA
 db = SQLAlchemy(server)
 bcrypt = Bcrypt(server)
 
-    # Configure LoginManager
+# Configure LoginManager
 from database import User    
 server.secret_key = SECRET_KEY
 login_manager = LoginManager()
@@ -45,9 +45,11 @@ db.session.commit()
 
 # Blueprints
 from login import login_api
+# from data_predict import dashboard_api
 
 #Register all the api blueprnts
 server.register_blueprint(login_api, url_prefix='/login')
+# server.register_blueprint(dashboard_api, url_prefix='/dashboard')
 
 # Login redirect
 @server.route('/')
@@ -60,10 +62,11 @@ def goto_login():
 @login_required
 def signout():
     logout_user
-    session.clear() # BUG-FIX - One of the cookies still remains even after logout_user
+    session.clear() #! BUG-FIX - One of the cookies still remains even after logout_user
     return redirect('/login')
 
-# Defaults empty dataFrame for Initial values 
+
+# # Defaults empty dataFrame for Initial values 
 name = ""
 df = pd.DataFrame(columns=["Mid-Values", "Date"])
 
@@ -141,4 +144,5 @@ def new_df(name, start, end):
             }
 
 if __name__ == '__main__':
+    # server.run(debug=True, host='0.0.0.0')
     app.run_server(debug=True, host='0.0.0.0')
