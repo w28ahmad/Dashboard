@@ -11,16 +11,21 @@ def register_callbacks(dashapp):
         [
             Input(component_id="input", component_property='value'), 
             Input(component_id="start_date", component_property="value"),
-            Input(component_id="end_date", component_property='value')
+            Input(component_id="end_date", component_property='value'),
+            Input(component_id="predict", component_property='value')
         ]
     )
     # dynamicly updating the graph from the name, start-date and end-date
-    def new_df(name, start, end):
-        print(name, start, end)
+    def new_df(name, start, end, is_predict):
+        print(is_predict)
         try:
             df = stock_data(start, end, name, BASEDIR)
             df["Mid-Values"] = (df["High"]+df["Low"])/2
             df.reset_index(inplace=True)
+            
+            # Show predictions, # Add the prediction function here
+            if len(is_predict):
+                print('hello')
         except:
             print("Stock Name not found")
             df =  pd.DataFrame(columns=["Date", "Mid-Values"])

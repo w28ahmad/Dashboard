@@ -15,6 +15,8 @@ utils/__pycache__
 __pycache__
 models/.ipynb_checkpoints/
 ~/
+config/__init__.pyc
+__init__.pyc
 
 .env
 dbTest
