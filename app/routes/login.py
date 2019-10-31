@@ -1,10 +1,12 @@
 from flask import Blueprint, abort, render_template, request, redirect, url_for
 from flask_bcrypt import Bcrypt
-from database import User, db
+from webapp.app.models.model import User
+from webapp.app.extensions import db
 from flask_login import login_user, login_required
 
+
 bcrypt = Bcrypt()
-login_api = Blueprint('login', __name__, template_folder="templates")
+login_api = Blueprint('login', __name__, template_folder="./../assets/templates")
 
 
 # The default webpage for login

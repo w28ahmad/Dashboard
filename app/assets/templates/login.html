@@ -3,8 +3,11 @@
     <meta charset="utf-8" />
 
     <title>Index</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/layout.css') }}"> -->
-    <link rel="stylesheet" href="./../static/css/layout.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='css/layout.css')}}"
+    />
+    <!-- <link rel="stylesheet" href="layout.css" /> -->
     <script type="text/javascript" src="./../static/js/login.js"></script>
   </head>
 
@@ -17,7 +20,7 @@
 
     <form method="POST" action="/login/signin" id="signin_form">
       <div class="box">
-        <h1>ML Stock</h1>
+        <h1>ML Stocks</h1>
 
         <input
           type="email"

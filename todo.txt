@@ -1,8 +1,10 @@
 Todo:
+
     Find a way to abstract the dash app
         usefull urls
         - https://medium.com/@olegkomarov_77860/how-to-embed-a-dash-app-into-an-existing-flask-app-ea05d7a2210b
 
+    - merge branch to model
     Optimize lstm model
         # Conclusions the model works but all of the predictions are horrably off
         # 1. Research about how to get more data from quandle
