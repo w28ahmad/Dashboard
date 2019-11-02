@@ -67,7 +67,7 @@ class uni_lstm:
             self.save_model(filename,)
             
             # Make predictions
-            for x, y in self.test_univariate.take(5):
+            for x, y in self.test_univariate.take(10):
                 plot = self.show_plot([x[0].numpy(), y[0].numpy(),
                             self.model.predict(x)[0]], 0, 'Simple LSTM model')
                 plot.show()
@@ -210,7 +210,7 @@ if __name__ == '__main__':
     BASEDIR = os.path.join(os.getcwd(), '../../')
     load_dotenv(os.path.join(BASEDIR, '.env'))
     
-    start_date = '2017-04-04'
+    start_date = '2000-04-04'
     end_date = '2018-04-04'
     name = 'AMZN'
     
@@ -220,8 +220,8 @@ if __name__ == '__main__':
     
     # Creating the LSTM class
     lstm = uni_lstm(df['mid_data'].values[::-1], False,
-                    TRAIN_SPLIT=210, EPOCHS=100,
-                    BATCH_SIZE=10, BUFFER_SIZE=20,
-                    EVALUATION_INTERVAL=5, seed=13, 
+                    TRAIN_SPLIT=2000, EPOCHS=200,
+                    BATCH_SIZE=30, BUFFER_SIZE=100,
+                    EVALUATION_INTERVAL=20, seed=12, 
                     univariate_past_history=20,
                     univariate_future_target=0,)

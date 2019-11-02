@@ -29,11 +29,11 @@ def register_callbacks(dashapp):
             
             # Show predictions, # Add the prediction function here
             if len(is_predict):
-                num_prediction = 20
+                num_prediction = 50
                 
                
                 # lstm prediction
-                lstm = uni_lstm(df['Mid-Values'].values, True,
+                lstm = uni_lstm(df['Mid-Values'].values[::-1], True,
                         TRAIN_SPLIT=210, EPOCHS=100,
                         BATCH_SIZE=10, BUFFER_SIZE=20,
                         EVALUATION_INTERVAL=5, seed=13, 
