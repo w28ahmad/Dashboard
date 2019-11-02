@@ -15,11 +15,12 @@ def register_callbacks(dashapp):
             Input(component_id="input", component_property='value'), 
             Input(component_id="start_date", component_property="value"),
             Input(component_id="end_date", component_property='value'),
+            Input(component_id="predict_amount", component_property='value'),
             Input(component_id="predict", component_property='value')
         ]
     )
     # dynamicly updating the graph from the name, start-date and end-date
-    def new_df(name, start, end, is_predict):
+    def new_df(name, start, end, prediction_amount, is_predict):
         try:
             df = stock_data(start, end, name, BASEDIR)
             df["Mid-Values"] = (df["High"]+df["Low"])/2
@@ -28,10 +29,9 @@ def register_callbacks(dashapp):
             graph_x, predictions = [], []
             
             # Show predictions, # Add the prediction function here
-            if len(is_predict):
-                num_prediction = 50
+            if len(is_predict) and prediction_amount and len(prediction_amount):
+                num_prediction = int(prediction_amount)
                 
-               
                 # lstm prediction
                 lstm = uni_lstm(df['Mid-Values'].values[::-1], True,
                         TRAIN_SPLIT=210, EPOCHS=100,
