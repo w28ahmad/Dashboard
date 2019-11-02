@@ -1,8 +1,4 @@
 Todo:
-    create a sequencer - that sequences n sets of m points that are need to make the m+1'th prediction and these predictions
-    are made n times for each one of the n sets,
-        Note, another function for the dates of each of the n-set predictions is needed. Because we need the dates for the x values
-
     Optimize lstm model
         # Conclusions the model works but all of the predictions are horrably off
         # 1. Research about how to get more data from quandle
@@ -24,6 +20,15 @@ Todo:
     following multiple stocks
 
 Done:
+    show the predicted points on the graph
+
+    fix lstm constant values
+
+    create a sequencer - that sequences n sets of m points that are need to make the m+1'th prediction and these predictions
+    are made n times for each one of the n sets,
+    Note, another function for the dates of each of the n-set predictions is needed. Because we need the dates for the x values
+
+
     radio button callback for prediction points
 
     Find a way to abstract the dash app

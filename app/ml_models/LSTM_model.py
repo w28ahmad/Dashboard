@@ -25,38 +25,19 @@ class uni_lstm:
         self.BUFFER_SIZE = kwargs['BUFFER_SIZE'] if 'BUFFER_SIZE' in kwargs else 20
         self.EVALUATION_INTERVAL = kwargs['EVALUATION_INTERVAL'] if 'EVALUATION_INTERVAL' in kwargs else 5
         self.EPOCHS = kwargs['EPOCHS'] if 'EPOCHS' in kwargs else 200
-        filename = kwargs['filename'] if 'filename' in kwargs else None
         
         if 'seed' in kwargs:
             tf.random.set_seed(kwargs['seed'])
 
-
         if use_recent_model:
-            # ! For testing only
-            # Normalize the data
-            self.normalize_data()
-            
-            # Create windows
-            univariate_past_history = kwargs['univariate_past_history'] if 'univariate_past_history' in kwargs else 20
-            univariate_future_target = kwargs['univariate_future_target'] if 'univariate_future_target' in kwargs else 0
-            
-            x_train, y_train = self.univariate_data(0, self.TRAIN_SPLIT, univariate_past_history, univariate_future_target) # Training
-            x_test, y_test = self.univariate_data(self.TRAIN_SPLIT, None, univariate_past_history, univariate_future_target) # Testing
-            
-            shape = x_train.shape[-2:]
-            
-            # Creating training slices and shuffling them
-            train_univariate = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-            self.train_univariate = train_univariate.cache().shuffle(self.BUFFER_SIZE).batch(self.BATCH_SIZE).repeat()
-
-            
+            filename='model.h5'
+            # filename = kwargs['filename'] if 'filename' in kwargs else 'model.h5'
             self.load_model(filename)
-            self.predict(self.train_univariate)
             
         
         else:
             # Normalize the data
-            self.normalize_data()
+            self. data = self.normalize(self.data)
             
             # Create windows
             univariate_past_history = kwargs['univariate_past_history'] if 'univariate_past_history' in kwargs else 20
@@ -82,7 +63,14 @@ class uni_lstm:
             self.train_model()
             
             # Save model
+            filename = 'model.h5'
             self.save_model(filename,)
+            
+            # Make predictions
+            for x, y in self.test_univariate.take(5):
+                plot = self.show_plot([x[0].numpy(), y[0].numpy(),
+                            self.model.predict(x)[0]], 0, 'Simple LSTM model')
+                plot.show()
             
             
             
@@ -116,8 +104,12 @@ class uni_lstm:
     
     # predict the future given some data
     def predict(self, data=None):
-        pass
-          
+        try:
+            prediction = self.model.predict(data)
+            return prediction
+        except Exception as e:
+            print("ERROR", e)
+            
         # For testing    
         # for x, y in data.take(3):
         #     plot = self.show_plot([x[0].numpy(), y[0].numpy(),
@@ -149,10 +141,21 @@ class uni_lstm:
             labels.append(self.data[i+target_size])
         return np.array(data), np.array(labels)
 
-    def normalize_data(self):
-        data_mean = self.data[:self.TRAIN_SPLIT].mean()
-        data_std = self.data[:self.TRAIN_SPLIT].std()
-        self.data = (self.data-data_mean)/data_std
+    def normalize(self, data):
+        data_mean = data[:self.TRAIN_SPLIT].mean()
+        data_std = data[:self.TRAIN_SPLIT].std()
+        data = (data-data_mean)/data_std
+        
+        return data
+        
+    def unnormalize(self, data, predictions):
+        '''
+        the predictions must be in an array format
+        :returns unnormalized predictions
+        '''
+        data_mean = data[:self.TRAIN_SPLIT].mean()
+        data_std = data[:self.TRAIN_SPLIT].std()
+        return (predictions*data_std)+data_mean
     
     # For testing the model 
     def create_time_steps(self,length):
@@ -204,7 +207,7 @@ if __name__ == '__main__':
     import os
     from dotenv import load_dotenv
     
-    BASEDIR = os.path.join(os.getcwd(), '..')
+    BASEDIR = os.path.join(os.getcwd(), '../../')
     load_dotenv(os.path.join(BASEDIR, '.env'))
     
     start_date = '2017-04-04'
@@ -216,7 +219,7 @@ if __name__ == '__main__':
     df['mid_data'] = (df['High']+df['Low'])/2
     
     # Creating the LSTM class
-    lstm = uni_lstm(df['mid_data'].values, True,
+    lstm = uni_lstm(df['mid_data'].values[::-1], False,
                     TRAIN_SPLIT=210, EPOCHS=100,
                     BATCH_SIZE=10, BUFFER_SIZE=20,
                     EVALUATION_INTERVAL=5, seed=13, 

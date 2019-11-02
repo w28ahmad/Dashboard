@@ -6,6 +6,7 @@ import pandas as pd
 # Defaults empty dataFrame for Initial values 
 name = ""
 df = pd.DataFrame(columns=["Mid-Values", "Date"])
+predictions, graph_x = [], []
 
 layout = html.Div(children=[
     html.H1(children='Stock Analysis'),
@@ -54,7 +55,7 @@ layout = html.Div(children=[
             figure={
                 'data': [
                     {'x': df["Date"], 'y': df["Mid-Values"], 'type': 'line', 'name': name},
-                    # {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'line', 'name': u'Montréal'},
+                    {'x': [], 'y': [], 'type': 'line', 'name':"predictions"},
                 ],
                 'layout': {
                     'title': f'Stock Prices for {name}',
