@@ -4,6 +4,11 @@
 
 - Implement sentament analysis graphs using the twitter api
 
+- Fix all the prediction dashboard bug
+
+  - start date is wierd
+  - prediction checkbox and input combo is specific to the its order
+
 - Optimize lstm model
 
   - Research what Batch_size, Buffer_size and evaluation interval accomplish
@@ -75,7 +80,6 @@
 - docker run -d -p 5000:5000 app:latest
 
 - http://0.0.0.0:8050/login/
-
 
 # Dash good reference examples
 

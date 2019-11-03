@@ -1,4 +1,7 @@
 from dash.dependencies import Input, Output
+import plotly
+import plotly.graph_objs as go
+
 import pandas as pd
 
 from webapp.app.config import BASEDIR
@@ -10,7 +13,7 @@ from webapp.app.ml_models.LSTM_model import uni_lstm # Univariant LSTM class
 
 def register_callbacks(dashapp):
     @dashapp.callback(
-        Output(component_id="graph", component_property="figure"),
+        Output(component_id="graph-prediction", component_property="figure"),
         [
             Input(component_id="input", component_property='value'), 
             Input(component_id="start_date", component_property="value"),
@@ -20,7 +23,7 @@ def register_callbacks(dashapp):
         ]
     )
     # dynamicly updating the graph from the name, start-date and end-date
-    def new_df(name, start, end, prediction_amount, is_predict):
+    def Update_prediction(name, start, end, prediction_amount, is_predict):
         try:
             df = stock_data(start, end, name, BASEDIR)
             df["Mid-Values"] = (df["High"]+df["Low"])/2
@@ -59,14 +62,56 @@ def register_callbacks(dashapp):
                 # Unnormalize the predictions
                 predictions = lstm.unnormalize(data, predictions.reshape(1, -1)[0])
                 
+            return {
+                    'data':[{'x': df["Date"], 'y': df["Mid-Values"], 'type':'line','name':name},
+                            {'x': graph_x, 'y': predictions, 'type':'line', 'name':'predictions'}],
+                    'layout':{
+                        'title': f'Stock Prices for {name}'
+                        }
+                    }
+            
         except Exception as e:
             print("Error", e)
             df =  pd.DataFrame(columns=["Date", "Mid-Values"])
         
+        
+    @dashapp.callback(
+        Output(component_id="graph-sentiment", component_property="figure"),
+        [
+            Input(component_id="input", component_property='value'), 
+        ]
+    )
+    def update_sentiment(name):
+        X = [1, 2, 3, 4, 5, 6, 7]
+        Y = [2, 3, 5, 7, 9, 4, 7]
+        Y2 = [3, 4, 5, -3, -2, -5, 6] 
+        
+        data = plotly.graph_objs.Scatter(
+                x=X,
+                y=Y,
+                name='Sentiment',
+                mode= 'lines',
+                yaxis='y2',
+                # line = dict(color = (app_colors['sentiment-plot']),
+                            # width = 4,)
+                )
+
+        data2 = plotly.graph_objs.Bar(
+                x=X,
+                y=Y2,
+                name='Volume',
+                # marker=dict(color=app_colors['volume-bar']),
+                )
+        
         return {
-                'data':[{'x': df["Date"], 'y': df["Mid-Values"], 'type':'line','name':name},
-                        {'x': graph_x, 'y': predictions, 'type':'line', 'name':'predictions'}],
-                'layout':{
-                    'title': f'Stock Prices for {name}'
-                    }
+                'data':[data, data2],
+                'layout':go.Layout(xaxis=dict(range=[min(X),max(X)]),
+                                    yaxis=dict(range=[min(Y2),max(Y2*4)], title='Volume', side='right'),
+                                    yaxis2=dict(range=[min(Y),max(Y)], side='left', overlaying='y',title='sentiment'),
+                                    title=f'Live sentiment for: {name}',
+                                    # font={'color':app_colors['text']},
+                                    # plot_bgcolor = app_colors['background'],
+                                    # paper_bgcolor = app_colors['background'],
+                                    showlegend=False
+                                    )
                 }

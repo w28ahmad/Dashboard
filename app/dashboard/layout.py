@@ -3,11 +3,6 @@ import dash_html_components as html
 
 import pandas as pd
 
-# Defaults empty dataFrame for Initial values 
-name = ""
-df = pd.DataFrame(columns=["Mid-Values", "Date"])
-predictions, graph_x = [], []
-
 layout = html.Div(children=[
     html.Div(children=[
         html.H1(children='Stock Analysis', style={'margin': '1%', 'font-weight': 'bold'}),
@@ -61,17 +56,8 @@ layout = html.Div(children=[
         ], style={'margin':'2%', 'display':'inherit'}),
         html.Div([
                 dcc.Graph(
-                id='graph',
-                figure={
-                    'data': [
-                        {'x': df["Date"], 'y': df["Mid-Values"], 'type': 'line', 'name': name},
-                        {'x': [], 'y': [], 'type': 'line', 'name':"predictions"},
-                    ],
-                    'layout': {
-                        'title': f'Stock Prices for {name}',
-                    },
-                },
-            )        
+                id='graph-prediction',
+                )        
         ], style={
                 'width':'80%', 
                 'float':'right',
@@ -79,7 +65,16 @@ layout = html.Div(children=[
                 })
 
     ], style={'display':'inline-block', 'width':'100%'}),
-    html.Div(children=[
+    html.Div(children=[# Sentiment analysis section
         html.H1(children='Stock Sentiment Analysis', style={'font-weight': 'bold', 'display':'inherit'})
-    ], className='title', style={'display':'inline-block', 'margin':'1%'})
+    ], className='title', style={'display':'inline-block',
+                                 'margin':'1%'}
+    ),
+    
+    html.Div(children=[
+        dcc.Graph(
+            id='graph-sentiment',
+        )
+    ])
+    
 ])
