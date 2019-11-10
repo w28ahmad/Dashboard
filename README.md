@@ -1,11 +1,13 @@
 # Todo:
 
-Twitter streamer to mongo. Turn the data into insert many, instead of insert one.
+- Create a json file for the data so you don't have to keep calling find
+- Twitter streamer to mongo. Turn the data into insert many, instead of insert one.
 
 - for the sentiment analysis make sure the env variables are accessed from the right place
 
   - i.e app/sentiment_analysis/twitterConn.py
 
+- Unhardcode the num_tweets variable
 - make sure the lstm univariate model is picked from the right place
 - make the prediction n value dynamic
 
