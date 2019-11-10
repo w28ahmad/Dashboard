@@ -1,5 +1,12 @@
 # Todo:
 
+- preprocess text data in realtime
+- save the data in mongodb in realtime, making sure that the data is not already there
+- for the sentiment analysis make sure the env variables are accessed from the right place
+
+  - i.e app/sentiment_analysis/twitterConn.py
+
+- make sure the lstm univariate model is picked from the right place
 - make the prediction n value dynamic
 
 - Implement sentament analysis graphs using the twitter api
