@@ -1,7 +1,7 @@
 # Todo:
 
-- preprocess text data in realtime
-- save the data in mongodb in realtime, making sure that the data is not already there
+Twitter streamer to mongo. Turn the data into insert many, instead of insert one.
+
 - for the sentiment analysis make sure the env variables are accessed from the right place
 
   - i.e app/sentiment_analysis/twitterConn.py
@@ -9,34 +9,36 @@
 - make sure the lstm univariate model is picked from the right place
 - make the prediction n value dynamic
 
-- Implement sentament analysis graphs using the twitter api
-
-- Fix all the prediction dashboard bug
+* Fix all the prediction dashboard bug
 
   - start date is wierd
   - prediction checkbox and input combo is specific to the its order
 
-- Optimize lstm model
+* Optimize lstm model
 
   - Research what Batch_size, Buffer_size and evaluation interval accomplish
   - Train a multi-variant lstm
   - Fix model.h5 location problem
 
-- Create a side bar
+* Create a side bar
 
-- update the docker file to encorporate the new changes
+* update the docker file to encorporate the new changes
 
-- Get the model running on docker
+* Get the model running on docker
 
-- Continous stock streaming into a db or a program
+* Continous stock streaming into a db or a program
 
-- Research automated investing into stocks
+* Research automated investing into stocks
 
-- predicting when to swich to different stocks
+* predicting when to swich to different stocks
 
-- following multiple stocks
+* following multiple stocks
 
 # Done:
+
+- Implement sentament analysis graphs using the twitter api
+- preprocess text data in realtime
+- save the data in mongodb in realtime, making sure that the data is not already there
 
 - Find a way to get more data from qandle,
 

@@ -8,7 +8,7 @@ from webapp.app.config import BASEDIR
 from utils.load_data import stock_data
 
 # Import prediction assets
-from dashboard.prediction import data_sequencer, time_sequencer
+from dashboard.prediction import data_sequencer, time_sequencer, sentiment_sequencer
 from webapp.app.ml_models.LSTM_model import uni_lstm # Univariant LSTM class 
 
 def register_callbacks(dashapp):
@@ -82,9 +82,14 @@ def register_callbacks(dashapp):
         ]
     )
     def update_sentiment(name):
-        X = [1, 2, 3, 4, 5, 6, 7]
-        Y = [2, 3, 5, 7, 9, 4, 7]
-        Y2 = [3, 4, 5, -3, -2, -5, 6] 
+        data = sentiment_sequencer()
+        
+        X = data['Date']
+        Y = data['polarity']
+        Y2 = data['subjectivity']        
+        # X = [1, 2, 3, 4, 5, 6, 7] # Date
+        # Y = [2, 3, 5, 7, 9, 4, 7] # Polarity
+        # Y2 = [3, 4, 5, -3, -2, -5, 6] # Subjectivity
         
         data = plotly.graph_objs.Scatter(
                 x=X,

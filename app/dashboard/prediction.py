@@ -1,4 +1,7 @@
 import numpy as np
+import pandas as pd
+from pymongo import MongoClient
+
 from dateutil import parser
 # BDay is business day, not birthday...
 from pandas.tseries.offsets import BDay
@@ -29,3 +32,49 @@ def time_sequencer(time_data, n):
         sequenced_data.append(parser.parse(date)+BDay(1))
         
     return sequenced_data
+
+'''
+connects to mongodb
+returns x (date), y1 (polarity), y2 (Subjectivity) 
+'''
+def sentiment_sequencer():
+    import os, sys
+    from dotenv import load_dotenv
+
+    BASEDIR = os.path.join(os.getcwd(), "./")
+    sys.path.append(BASEDIR)
+
+    #Load environment Variables
+    load_dotenv(os.path.join(BASEDIR, '.env'))
+    
+    mongodb_url = os.getenv("MONGODB_URL")
+
+    # Connect and save data to mongodb
+    client = MongoClient(mongodb_url)
+    db=client['Tweet_Sentiment']
+    coll = db["sentiment_data"]
+    
+    # Storing data in arrays
+    dates = []
+    polarity = []
+    subjectivity = []
+    tweet = []
+    
+    for x in coll.find():
+        dates.append(x['date'])
+        polarity.append(x['polarity'])
+        subjectivity.append(x['subjectivity'])
+        tweet.append((x['tweet']))
+        
+    # Create a dataFrame
+    data = pd.DataFrame(
+        data = {'Date':dates, 
+                'polarity':polarity, 
+                'subjectivity':subjectivity, 
+                'tweet':tweet
+            }
+        )
+    
+    data.sort_values(by='Date', inplace=True)
+    
+    return data

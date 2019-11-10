@@ -69,9 +69,6 @@ def save_data_mongo(clean_tweet_en, date, polarity, subjectivity):
         print("Mongo Error on pushing data")
         print(e)
         
-    
-    
-
 #override tweepy.StreamListener to add logic to on_status
 class MyStreamListener(tweepy.StreamListener):
     def mongo_conn(self):
@@ -200,9 +197,6 @@ def preprocess_data(tweet):
 def tweet_sentiment(tweet):
     sentiments = TextBlob(tweet)
     return sentiments.sentiment.polarity, sentiments.sentiment.subjectivity
-
-
-    
         
 if __name__ == '__main__':
     filter_strings = ["Logan", "Paul", "ksi"]
