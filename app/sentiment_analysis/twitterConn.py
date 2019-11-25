@@ -26,12 +26,12 @@ consumer_secret=os.getenv("CONSUMER_SECRET")
 access_token=os.getenv("ACCESS_TOKEN")
 access_token_secret=os.getenv("ACCESS_TOKEN_SECRET")
 mongodb_url = os.getenv("MONGODB_URL")
-num_tweets = 50
+num_tweets = 300
 
 # Connect and save data to mongodb
 client = MongoClient(mongodb_url)
 db=client['Tweet_Sentiment']
-coll = db["sentiment_data"]
+coll = db["sentiment_data_amazon"]
 
 # Get all the current documents from mongodb
 past_tweets = []
@@ -210,20 +210,7 @@ def tweet_sentiment(tweet):
     return sentiments.sentiment.polarity, sentiments.sentiment.subjectivity
         
 if __name__ == '__main__':
-    filter_strings = ["Logan", "Paul", "ksi"]
+    filter_strings = ["AMZN", "Amazon", "jeff bezos"]
     sentiment = twitter_sentiment(filter_strings)
     sentiment.stream()
     
-    
-    
-'''
-TODO :
-- At the start of the program create a json file of all the data from mongodb
-- On every iteration of the stream check to see if the data is present inside the json file
-- if not present, add it to the data and another empty array which will later be pushed on to mongo
-- This new array will contain all the new json data that already doesn't exist on mongo
-- This will reduce connection to mongodb from infinite to 2 per stream iteration
-
-How to end the stream on command?
-- is there a number n for which the program only runs through n items from the stream 
-'''

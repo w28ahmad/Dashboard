@@ -87,14 +87,11 @@ def register_callbacks(dashapp):
         X = data['Date']
         Y = data['polarity']
         Y2 = data['subjectivity']        
-        # X = [1, 2, 3, 4, 5, 6, 7] # Date
-        # Y = [2, 3, 5, 7, 9, 4, 7] # Polarity
-        # Y2 = [3, 4, 5, -3, -2, -5, 6] # Subjectivity
         
         data = plotly.graph_objs.Scatter(
                 x=X,
                 y=Y,
-                name='Sentiment',
+                name='Polarity',
                 mode= 'lines',
                 yaxis='y2',
                 # line = dict(color = (app_colors['sentiment-plot']),
@@ -102,17 +99,18 @@ def register_callbacks(dashapp):
                 )
 
         data2 = plotly.graph_objs.Bar(
+                base=0,
                 x=X,
                 y=Y2,
-                name='Volume',
+                name='Subjectivity',
                 # marker=dict(color=app_colors['volume-bar']),
                 )
         
         return {
                 'data':[data, data2],
-                'layout':go.Layout(xaxis=dict(range=[min(X),max(X)]),
-                                    yaxis=dict(range=[min(Y2),max(Y2*4)], title='Volume', side='right'),
-                                    yaxis2=dict(range=[min(Y),max(Y)], side='left', overlaying='y',title='sentiment'),
+                'layout':go.Layout(xaxis=dict(range=[min(X),max(X)], type='category'),
+                                    yaxis=dict(range=[-1,1], title='Subjectivity', side='right'),
+                                    yaxis2=dict(range=[-1, 1], side='left', overlaying='y',title='Polarity'),
                                     title=f'Live sentiment for: {name}',
                                     # font={'color':app_colors['text']},
                                     # plot_bgcolor = app_colors['background'],

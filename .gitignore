@@ -22,4 +22,4 @@ __init__.pyc
 dbTest
 
 *.h5
-*.ipynb
+**.ipynb

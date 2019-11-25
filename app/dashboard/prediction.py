@@ -52,7 +52,7 @@ def sentiment_sequencer():
     # Connect and save data to mongodb
     client = MongoClient(mongodb_url)
     db=client['Tweet_Sentiment']
-    coll = db["sentiment_data"]
+    coll = db["sentiment_data_amazon"]
     
     # Storing data in arrays
     dates = []
@@ -75,6 +75,11 @@ def sentiment_sequencer():
             }
         )
     
+    # Make sure that the values are sorted by date
     data.sort_values(by='Date', inplace=True)
+    
+    # Remove all 0 values
+    index = data[(data['polarity']==0) & (data['subjectivity']==0)].index
+    data.drop(data.index[index], inplace=True)
     
     return data
