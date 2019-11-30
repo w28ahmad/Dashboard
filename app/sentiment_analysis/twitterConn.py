@@ -26,61 +26,50 @@ consumer_secret=os.getenv("CONSUMER_SECRET")
 access_token=os.getenv("ACCESS_TOKEN")
 access_token_secret=os.getenv("ACCESS_TOKEN_SECRET")
 mongodb_url = os.getenv("MONGODB_URL")
-num_tweets = 300
+# num_tweets = 300
 
-# Connect and save data to mongodb
-client = MongoClient(mongodb_url)
-db=client['Tweet_Sentiment']
-coll = db["sentiment_data_amazon"]
-
-# Get all the current documents from mongodb
-past_tweets = []
-for doc in coll.find():
-    past_tweets.append(doc['tweet'])
-
-# Check if the tweet already exists
-def already_exists(tweet):
-    if tweet in past_tweets:
-        return True
-    else:
-        past_tweets.append(tweet)
-        return False
-
-
-saved_data = []
-# Saves data to saved_data
-def save_data(clean_tweet_en, date, polarity, subjectivity):
-    data = {
-            "tweet": clean_tweet_en,
-            "date": date,
-            "polarity": polarity,
-            "subjectivity": subjectivity
-            }
-    
-    try:
-        if already_exists(clean_tweet_en):
-            print(f'[INFO] Already Exists {clean_tweet_en}')
-        else:
-            saved_data.append(data)
-            print("[INFO] Tweet Added")
-            
-    except Exception as e:
-        print("Error on saving data")
-        print(e)
-        
-# Pushes data as a batch to mongodb
-def save_mongo_data():
-    try:
-        coll.insert_many(saved_data)
-    except Exception as e:
-        print("Error on pushing data to mongodb")
-        print(e)
     
 #override tweepy.StreamListener to add logic to on_status
 class MyStreamListener(tweepy.StreamListener):
+    def __init__(self, num_tweets, coll):
+        tweepy.StreamListener.__init__(self)
+        self.num_tweets = num_tweets
+        self.saved_data = []
+        # Get all the current documents from mongodb
+        self.past_tweets = []
+        for doc in coll.find():
+            self.past_tweets.append(doc['tweet'])
+    
     def mongo_conn(self):
         self.mongo_db = mongo()
         
+    # Check if the tweet already exists
+    def already_exists(self, tweet):
+        if tweet in self.past_tweets:
+            return True
+        else:
+            self.past_tweets.append(tweet)
+            return False
+        
+    # Saves data to saved_data
+    def save_data(self, clean_tweet_en, date, polarity, subjectivity):
+        data = {
+                "tweet": clean_tweet_en,
+                "date": date,
+                "polarity": polarity,
+                "subjectivity": subjectivity
+                }
+        
+        try:
+            if self.already_exists(clean_tweet_en):
+                print(f'[INFO] Already Exists {clean_tweet_en}')
+            else:
+                self.saved_data.append(data)
+                print("[INFO] Tweet Added")
+                
+        except Exception as e:
+            print("Error on saving data")
+            print(e)
     
     def on_status(self, status):
         # Preprocess Tweet
@@ -100,18 +89,32 @@ class MyStreamListener(tweepy.StreamListener):
         - If the tweet is not already in the databse
         - Add the date, tweet, polarity, subjectivity of that tweet to the databse
         '''
-        save_data(clean_tweet, date=status.created_at, polarity=polarity, subjectivity=subjectivity)
+        self.save_data(clean_tweet, date=status.created_at, polarity=polarity, subjectivity=subjectivity)
         
         # Scan a determined number of tweets
-        if len(saved_data) < num_tweets:
+        if len(self.saved_data) < self.num_tweets:
             return True
         else:
             return False
         
 class twitter_sentiment:
-    def __init__(self, filter_string):
+    def __init__(self, filter_string, num_tweets):
         self.filter = filter_string
         self.api = self.conn()
+        self.num_tweets = num_tweets
+        
+        # Connect and save data to mongodb
+        client = MongoClient(mongodb_url)
+        db=client['Tweet_Sentiment']
+        self.coll = db["sentiment_data_amazon"]
+        
+    # Pushes data as a batch to mongodb
+    def save_mongo_data(self, data):
+        try:
+            self.coll.insert_many(data)
+        except Exception as e:
+            print("Error on pushing data to mongodb")
+            print(e)
         
     def conn(self):
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -122,10 +125,11 @@ class twitter_sentiment:
         return api
 
     def stream(self):
-        myStreamListener = MyStreamListener()
+        myStreamListener = MyStreamListener(self.num_tweets, self.coll)
         myStream = tweepy.Stream(auth = self.api.auth, listener=myStreamListener)
         myStream.filter(track=self.filter) # filter stream
-        save_mongo_data() # Saving the new data to mongodb
+        data = myStreamListener.saved_data # Get the data thats not in the db
+        self.save_mongo_data(data) # Saving the new data to mongodb
 
 # Preprocess the text data
 def preprocess_data(tweet):
@@ -211,6 +215,7 @@ def tweet_sentiment(tweet):
         
 if __name__ == '__main__':
     filter_strings = ["AMZN", "Amazon", "jeff bezos"]
-    sentiment = twitter_sentiment(filter_strings)
+    num_tweets = 3
+    sentiment = twitter_sentiment(filter_strings, num_tweets)
     sentiment.stream()
     

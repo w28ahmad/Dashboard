@@ -65,12 +65,27 @@ layout = html.Div(children=[
                 })
 
     ], style={'display':'inline-block', 'width':'100%'}),
+   
     html.Div(children=[# Sentiment analysis section
         html.H1(children='Stock Sentiment Analysis', style={'font-weight': 'bold', 'display':'inherit'})
     ], className='title', style={'display':'inline-block',
                                  'margin':'1%'}
     ),
     
+    html.Div(children=[# Sentiment analysis section
+        html.Div(children=[ # inputs
+             html.P('Number of new Sentiments'),
+            dcc.Slider(
+                min=0,
+                max=100,
+                step=10,
+                marks={
+                    i: i for i in range(0, 100, 10)
+                },
+                id="numberOfSentiments",
+            ),
+        ], style={'width':'20%', 'margin-left': '2%'}),
+    ], className='title', style={'margin':'0% 0% 2% 0%'}),
     html.Div(children=[
         dcc.Graph(
             id='graph-sentiment',

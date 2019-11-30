@@ -9,7 +9,10 @@ from utils.load_data import stock_data
 
 # Import prediction assets
 from dashboard.prediction import data_sequencer, time_sequencer, sentiment_sequencer
-from webapp.app.ml_models.LSTM_model import uni_lstm # Univariant LSTM class 
+from webapp.app.ml_models.LSTM_model import uni_lstm # Univariant LSTM class
+
+# Sentiment Imports
+from webapp.app.sentiment_analysis.twitterConn import twitter_sentiment
 
 def register_callbacks(dashapp):
     @dashapp.callback(
@@ -78,10 +81,20 @@ def register_callbacks(dashapp):
     @dashapp.callback(
         Output(component_id="graph-sentiment", component_property="figure"),
         [
-            Input(component_id="input", component_property='value'), 
+            Input(component_id="input", component_property='value'),
+            Input(component_id="numberOfSentiments", component_property='value'),
         ]
     )
-    def update_sentiment(name):
+    def update_sentiment(name, numberOfSentiments):
+        num_tweets = int(numberOfSentiments) if numberOfSentiments else 0
+        print(num_tweets)
+
+        # update mongoDB
+        if num_tweets:
+            filter_strings = [str(name)]
+            sentiment = twitter_sentiment(filter_strings, num_tweets)
+            sentiment.stream()
+            
         data = sentiment_sequencer()
         
         X = data['Date']
