@@ -3,9 +3,12 @@ import dash_html_components as html
 
 import pandas as pd
 
+# Colors
+from webapp.app.dashboard.style import app_colors
+
 layout = html.Div(children=[
     html.Div(children=[
-        html.H1(children='Stock Analysis', style={'margin': '1%', 'font-weight': 'bold'}),
+        html.H1(children='Stock Analysis', style={'margin': '1%', 'font-weight': 'bold', 'color':app_colors['text']}),
         
         html.Div(children=[
             html.Div(children=[ # inputs
@@ -61,35 +64,46 @@ layout = html.Div(children=[
         ], style={
                 'width':'80%', 
                 'float':'right',
-                'display':'inherit'
+                'display':'inherit',
                 })
 
     ], style={'display':'inline-block', 'width':'100%'}),
    
     html.Div(children=[# Sentiment analysis section
-        html.H1(children='Stock Sentiment Analysis', style={'font-weight': 'bold', 'display':'inherit'})
+        html.H1(children='Stock Sentiment Analysis', style={'font-weight': 'bold', 'display':'inherit', 'color':app_colors['text']})
     ], className='title', style={'display':'inline-block',
                                  'margin':'1%'}
     ),
     
     html.Div(children=[# Sentiment analysis section
-        html.Div(children=[ # inputs
-             html.P('Number of new Sentiments'),
-            dcc.Slider(
-                min=0,
-                max=100,
-                step=10,
-                marks={
-                    i: i for i in range(0, 100, 10)
-                },
-                id="numberOfSentiments",
-            ),
-        ], style={'width':'20%', 'margin-left': '2%'}),
-    ], className='title', style={'margin':'0% 0% 2% 0%'}),
+        html.Div(children=[
+            html.Div(children=[ # inputs
+                html.P('Number of new Sentiments'),
+                dcc.Slider(
+                    min=0,
+                    max=100,
+                    step=10,
+                    marks={
+                        i: i for i in range(0, 100, 10)
+                    },
+                    id="numberOfSentiments",
+                ),
+            ], style={'width':'20%', 'margin-left': '2%', "float":'left'}),
+            html.Div(children=[ # inputs
+                html.P('Key Words'),
+                dcc.Input(
+                id='keywords',
+                placeholder='Jeff Bezos, Amazon, ...',
+                type='text',
+                value='',
+                ),
+            ], style={'width':'20%', 'float':'left', 'margin-left': '2%'}),
+        ], style={'display': "inline"}),
+    ], className='title', style={'margin':'0% 0% 5% 0%'}),
     html.Div(children=[
         dcc.Graph(
             id='graph-sentiment',
         )
     ])
     
-])
+], style={'backgroundColor': app_colors['background'], 'height':'2000px',})

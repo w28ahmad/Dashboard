@@ -14,6 +14,9 @@ from webapp.app.ml_models.LSTM_model import uni_lstm # Univariant LSTM class
 # Sentiment Imports
 from webapp.app.sentiment_analysis.twitterConn import twitter_sentiment
 
+# Colors
+from webapp.app.dashboard.style import app_colors
+
 def register_callbacks(dashapp):
     @dashapp.callback(
         Output(component_id="graph-prediction", component_property="figure"),
@@ -65,12 +68,30 @@ def register_callbacks(dashapp):
                 # Unnormalize the predictions
                 predictions = lstm.unnormalize(data, predictions.reshape(1, -1)[0])
                 
+            actual_data = plotly.graph_objs.Scatter(
+                            x=df["Date"],
+                            y=df["Mid-Values"],
+                            name=name,
+                            mode= 'lines',
+                            line = dict(color = (app_colors['line-plot']),
+                                        width = 4,)
+                            )
+            predicted_data = plotly.graph_objs.Scatter(
+                                x=graph_x,
+                                y=predictions,
+                                name="Predictions",
+                                mode= 'lines',
+                                line = dict(color = (app_colors['volume-bar']),
+                                            width = 4,)
+                                )
             return {
-                    'data':[{'x': df["Date"], 'y': df["Mid-Values"], 'type':'line','name':name},
-                            {'x': graph_x, 'y': predictions, 'type':'line', 'name':'predictions'}],
-                    'layout':{
-                        'title': f'Stock Prices for {name}'
-                        }
+                    'data':[actual_data, predicted_data],
+                    'layout':go.Layout(
+                            title= f'Stock Prices for {name}',
+                            font={'size':20,'color':app_colors['gtext']},
+                            paper_bgcolor = app_colors['background'],
+                            plot_bgcolor = app_colors['background']
+                        )
                     }
             
         except Exception as e:
@@ -83,15 +104,19 @@ def register_callbacks(dashapp):
         [
             Input(component_id="input", component_property='value'),
             Input(component_id="numberOfSentiments", component_property='value'),
+            Input(component_id="keywords", component_property='value'),
         ]
     )
-    def update_sentiment(name, numberOfSentiments):
+    def update_sentiment(name, numberOfSentiments, keywords):
         num_tweets = int(numberOfSentiments) if numberOfSentiments else 0
-        print(num_tweets)
+        print(f"[INFO] Adding {num_tweets} tweets...")
 
         # update mongoDB
         if num_tweets:
-            filter_strings = [str(name)]
+            keywords = keywords.split(",")
+            keywords.append(name)
+            print(keywords)
+            filter_strings = keywords
             sentiment = twitter_sentiment(filter_strings, num_tweets)
             sentiment.stream()
             
@@ -107,8 +132,8 @@ def register_callbacks(dashapp):
                 name='Polarity',
                 mode= 'lines',
                 yaxis='y2',
-                # line = dict(color = (app_colors['sentiment-plot']),
-                            # width = 4,)
+                line = dict(color = (app_colors['line-plot']),
+                            width = 4,)
                 )
 
         data2 = plotly.graph_objs.Bar(
@@ -116,7 +141,7 @@ def register_callbacks(dashapp):
                 x=X,
                 y=Y2,
                 name='Subjectivity',
-                # marker=dict(color=app_colors['volume-bar']),
+                marker=dict(color=app_colors['volume-bar']),
                 )
         
         return {
@@ -125,9 +150,9 @@ def register_callbacks(dashapp):
                                     yaxis=dict(range=[-1,1], title='Subjectivity', side='right'),
                                     yaxis2=dict(range=[-1, 1], side='left', overlaying='y',title='Polarity'),
                                     title=f'Live sentiment for: {name}',
-                                    # font={'color':app_colors['text']},
-                                    # plot_bgcolor = app_colors['background'],
-                                    # paper_bgcolor = app_colors['background'],
+                                    font={'size':20,'color':app_colors['gtext']},
+                                    plot_bgcolor = app_colors['background'],
+                                    paper_bgcolor = app_colors['background'],
                                     showlegend=False
                                     )
                 }
