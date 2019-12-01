@@ -1,16 +1,8 @@
 # Todo:
 
-- Make the nlp dashboard localized - meaning that there is a button to retrain the sentiments, with a function call
-- Add react to the project
-  - Add a sidebar...?
-- Improve the quality of the graphs And the overall dashboard
-
+- CNN Image upload
+- Research CNN's
 - Create a multi-variant lstm
-- for the sentiment analysis make sure the env variables are accessed from the right place
-
-  - i.e app/sentiment_analysis/twitterConn.py
-
-- Unhardcode the num_tweets variable
 - make sure the lstm univariate model is picked from the right place
 - make the prediction n value dynamic
 
@@ -27,18 +19,25 @@
 
 - update the docker file to encorporate the new changes
 
-- Get the model running on docker
+- Updating the dockerfile
 
 - Continous stock streaming into a db or a program
 
 - Research automated investing into stocks
 
-- predicting when to swich to different stocks
-
 - following multiple stocks
 
 # Done:
 
+- Create a cnn page
+- predicting when to swich to different stocks
+- for the sentiment analysis make sure the env variables are accessed from the right place
+  - i.e app/sentiment_analysis/twitterConn.py
+- Unhardcode the num_tweets variable
+- Make the nlp dashboard localized - meaning that there is a button to retrain the sentiments, with a function call
+- Add react to the project
+  - Add a sidebar...?
+- Improve the quality of the graphs And the overall dashboard
 - Refine NLP data on the dashboard to remove 0.0 vals
 - Twitter streamer to mongo. Turn the data into insert many, instead of insert one.
 - Implement sentament analysis graphs using the twitter api

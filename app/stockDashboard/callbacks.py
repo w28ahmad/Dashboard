@@ -8,14 +8,14 @@ from webapp.app.config import BASEDIR
 from utils.load_data import stock_data
 
 # Import prediction assets
-from dashboard.prediction import data_sequencer, time_sequencer, sentiment_sequencer
+from stockDashboard.prediction import data_sequencer, time_sequencer, sentiment_sequencer
 from webapp.app.ml_models.LSTM_model import uni_lstm # Univariant LSTM class
 
 # Sentiment Imports
 from webapp.app.sentiment_analysis.twitterConn import twitter_sentiment
 
 # Colors
-from webapp.app.dashboard.style import app_colors
+from stockDashboard.style import app_colors
 
 def register_callbacks(dashapp):
     @dashapp.callback(

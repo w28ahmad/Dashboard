@@ -35,31 +35,29 @@ def create_app():
 
 # Add dash-dashboard routes to main
 def register_dashapps(app):
-    from dashboard.layout import layout
-    from dashboard.callbacks import register_callbacks    
+    from appLayout import appdict
 
     # Meta tags for viewport responsiveness
     meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
     external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
     
-    
-    dashapp = dash.Dash(__name__,
-                         server=app,
-                         url_base_pathname='/dashboard/',
-                         external_stylesheets=external_stylesheets,
-                         meta_tags=[meta_viewport])
-    
-    # Adding External html
-    print(os.path.dirname(os.path.realpath(__file__)))
-    dashapp.index_string = open("./app/assets/templates/dashboard.html", "r").read()
-
-    with app.app_context():
-        dashapp.title = 'Dashapp'
-        dashapp.layout = layout
-        register_callbacks(dashapp)
+    for key in appdict:    
+        dashapp = dash.Dash(__name__,
+                            server=app,
+                            url_base_pathname=f'/{key}/',
+                            external_stylesheets=external_stylesheets,
+                            meta_tags=[meta_viewport])
         
-    # For dash authentication
-    _protect_dashviews(dashapp)
+        # Adding External html
+        dashapp.index_string = open("./app/assets/templates/dashboard.html", "r").read()
+
+        with app.app_context():
+            dashapp.title = appdict[key]["title"]
+            dashapp.layout = appdict[key]["layout"]
+            appdict[key]["callbacks"](dashapp)
+        
+        # For dash authentication
+        _protect_dashviews(dashapp)
 
 # Add authentication to dashviews
 def _protect_dashviews(dashapp):

@@ -4,7 +4,7 @@ import dash_html_components as html
 import pandas as pd
 
 # Colors
-from webapp.app.dashboard.style import app_colors
+from stockDashboard.style import app_colors
 
 layout = html.Div(children=[
     html.Div(children=[
