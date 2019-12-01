@@ -29,4 +29,4 @@ python3 app/main.py
 
 # Dashboard
 
-![](/assets/Dashboard.png)
+![](/assets/Dashboard2.png)

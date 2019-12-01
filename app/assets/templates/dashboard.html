@@ -1,0 +1,152 @@
+<html>
+  <head>
+    {%metas%}
+    <title>{%title%}</title>
+    {%favicon%} {%css%}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script>
+      $("#leftside-navigation .sub-menu > a").click(function(e) {
+        $("#leftside-navigation ul ul").slideUp(),
+          $(this)
+            .next()
+            .is(":visible") ||
+            $(this)
+              .next()
+              .slideDown(),
+          e.stopPropagation();
+      });
+    </script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div id="leftside-navigation" class="nano">
+        <ul class="nano-content">
+          <li>
+            <a href="index.html"
+              ><i class="fa fa-dashboard"></i><span>Stock Dashboard</span></a
+            >
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:void(0);"
+              ><i class="fa fa-cogs"></i><span>ML Fundamentals</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li>
+                <a href="ui-alerts-notifications.html">Data Preprocessing</a>
+              </li>
+              <li><a href="ui-panels.html">Classification</a></li>
+              <li><a href="ui-buttons.html">Training Models</a></li>
+              <li>
+                <a href="ui-slider-progress.html">Support Vector Machines</a>
+              </li>
+              <li><a href="ui-modals-popups.html">Decision Trees</a></li>
+              <li>
+                <a href="ui-icons.html">Ensemble Learning and Random Forests</a>
+              </li>
+              <li><a href="ui-grid.html">Dimensionality Reduction</a></li>
+              <li>
+                <a href="ui-tabs-accordions.html">Tabs &amp; Accordions</a>
+              </li>
+              <li><a href="ui-nestable-list.html">Nestable Lists</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:void(0);"
+              ><i class="fa fa-table"></i
+              ><span>Introduction to Aritificial Neural Networks</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li><a href="tables-basic.html">Basic Tables</a></li>
+
+              <li><a href="tables-data.html">Data Tables</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:void(0);"
+              ><i class="fa fa fa-tasks"></i
+              ><span>Training Deep Neural Networks</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li><a href="forms-components.html">Components</a></li>
+              <li><a href="forms-validation.html">Validation</a></li>
+              <li><a href="forms-mask.html">Mask</a></li>
+              <li><a href="forms-wizard.html">Wizard</a></li>
+              <li>
+                <a href="forms-multiple-file.html">Multiple File Upload</a>
+              </li>
+              <li><a href="forms-wysiwyg.html">WYSIWYG Editor</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu active">
+            <a href="javascript:void(0);"
+              ><i class="fa fa-envelope"></i
+              ><span>Convolutional Neural Networks</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li class="active"><a href="mail-inbox.html">Inbox</a></li>
+              <li><a href="mail-compose.html">Compose Mail</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:void(0);"
+              ><i class="fa fa-bar-chart-o"></i
+              ><span>Recurrent Neural Networks</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li><a href="charts-chartjs.html">Chartjs</a></li>
+              <li><a href="charts-morris.html">Morris</a></li>
+              <li><a href="charts-c3.html">C3 Charts</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:void(0);"
+              ><i class="fa fa-map-marker"></i><span>AutoEncoders</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li><a href="map-google.html">Google Map</a></li>
+              <li><a href="map-vector.html">Vector Map</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:void(0);"
+              ><i class="fa fa-file"></i><span>Reinforcement Learning</span
+              ><i class="arrow fa fa-angle-right pull-right"></i
+            ></a>
+            <ul>
+              <li><a href="pages-blank.html">Blank Page</a></li>
+              <li><a href="pages-login.html">Login</a></li>
+              <li><a href="pages-sign-up.html">Sign Up</a></li>
+              <li><a href="pages-calendar.html">Calendar</a></li>
+              <li><a href="pages-timeline.html">Timeline</a></li>
+              <li><a href="pages-404.html">404</a></li>
+              <li><a href="pages-500.html">500</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="typography.html"
+              ><i class="fa fa-text-height"></i
+              ><span>Reinforcement Learning</span></a
+            >
+          </li>
+        </ul>
+      </div>
+    </aside>
+    <!-- <div></div> -->
+    {%app_entry%}
+    <footer>
+      {%config%} {%scripts%} {%renderer%}
+    </footer>
+    <div>{%footer%}</div>
+  </body>
+</html>

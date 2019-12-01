@@ -47,8 +47,11 @@ def register_dashapps(app):
                          server=app,
                          url_base_pathname='/dashboard/',
                          external_stylesheets=external_stylesheets,
-                        #  assets_folder=get_root_path(__name__) + '/dashboard/assets/',
                          meta_tags=[meta_viewport])
+    
+    # Adding External html
+    print(os.path.dirname(os.path.realpath(__file__)))
+    dashapp.index_string = open("./app/assets/templates/dashboard.html", "r").read()
 
     with app.app_context():
         dashapp.title = 'Dashapp'

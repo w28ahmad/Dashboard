@@ -106,4 +106,4 @@ layout = html.Div(children=[
         )
     ])
     
-], style={'backgroundColor': app_colors['background'], 'height':'2000px',})
+], style={'backgroundColor': app_colors['background'], 'height':'1200px','width': '87%', 'float':'right'})
