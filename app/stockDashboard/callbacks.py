@@ -36,11 +36,11 @@ def register_callbacks(dashapp):
             df.reset_index(inplace=True)
             
             graph_x, predictions = [], []
-            
+
             # Show predictions, # Add the prediction function here
             if len(is_predict) and prediction_amount and len(prediction_amount):
                 num_prediction = int(prediction_amount)
-                
+            
                 # lstm prediction
                 lstm = uni_lstm(df['Mid-Values'].values[::-1], True,
                         TRAIN_SPLIT=210, EPOCHS=100,
@@ -53,21 +53,19 @@ def register_callbacks(dashapp):
                 
                 norm_data = lstm.normalize(data)
                 
-                 # Get prediction x-values
+                # Get prediction x-values
                 prediction_x = data_sequencer(norm_data, num_prediction)
-                
                 
                 # Get the graph x-values(timestamp) for those predictions
                 graph_x = time_sequencer(df['Date'].values[::-1], num_prediction)
                 # print('prediction_x')
-                
                 
                 # predict using prediction x_values
                 predictions = lstm.predict(prediction_x)
                 
                 # Unnormalize the predictions
                 predictions = lstm.unnormalize(data, predictions.reshape(1, -1)[0])
-                
+            
             actual_data = plotly.graph_objs.Scatter(
                             x=df["Date"],
                             y=df["Mid-Values"],

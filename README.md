@@ -27,6 +27,11 @@ python3 app/main.py
 
 ![](/assets/Login.png)
 
-# Dashboard
+# Stock Dashboard
 
 ![](/assets/Dashboard2.png)
+
+# Object Detection Dashboard
+
+![](/assets/cnnDashboard1.png)
+![](/assets/cnnDashboard2.png)

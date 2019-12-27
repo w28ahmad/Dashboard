@@ -35,7 +35,7 @@ layout = html.Div(children=[
             # Allow multiple files to be uploaded
             multiple=False
         ),
-        html.Div(id='output-image-upload'),
+        html.Div(id='output-image-upload', style={'float':'left'}),
     ], style={}),
 ],
     style={

@@ -2,7 +2,7 @@ from dash.dependencies import Input, Output, State
 import dash_html_components as html
 import plotly
 import plotly.graph_objs as go
-from .detection import setup_image_directory, save_as_jpg, image_prediction
+from .detection import setup_image_directory, save_as_jpg, image_prediction, read_file
 import datetime
 
 # from webapp.app.config import BASEDIR
@@ -12,15 +12,19 @@ from cnnDashboard.style import app_colors
 
 def register_callbacks(dashapp):
     def parse_contents(contents, filename, date):
+        b64String=contents.split('base64,')[1]
+        prefix = contents.split('base64,')[0]
         setup_image_directory()
-        save_as_jpg(filename, contents)
+        save_as_jpg(filename, b64String)
+        image_prediction()
+        new_contents = read_file(filename, prefix)
         return html.Div([
-        html.P(filename),
+        html.H5(filename),
         html.P(datetime.datetime.fromtimestamp(date)),
 
         # HTML images accept base64 encoded strings in the same format
         # that is supplied by the upload
-        html.Img(src=contents, style={"width": "100%"}),
+        html.Img(src=new_contents, style={"width": "100%"}),
     ], 
     style={
         'backgroundColor': app_colors['background'],

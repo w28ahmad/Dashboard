@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import os
+import keras
 
 class uni_lstm:
     '''
@@ -17,61 +18,62 @@ class uni_lstm:
         :param: data list: list of univariant data to train/predict
         :param: use_recent_model bool: if True load and use the most recent model
                                         otherwise retrain and resave model
-        :param:
         '''
-        self.data = data
-        self.TRAIN_SPLIT = kwargs['TRAIN_SPLIT'] if 'TRAIN_SPLIT' in kwargs else 200
-        self.BATCH_SIZE = kwargs['BATCH_SIZE'] if 'BATCH_SIZE' in kwargs else 10
-        self.BUFFER_SIZE = kwargs['BUFFER_SIZE'] if 'BUFFER_SIZE' in kwargs else 20
-        self.EVALUATION_INTERVAL = kwargs['EVALUATION_INTERVAL'] if 'EVALUATION_INTERVAL' in kwargs else 5
-        self.EPOCHS = kwargs['EPOCHS'] if 'EPOCHS' in kwargs else 200
-        
-        if 'seed' in kwargs:
-            tf.random.set_seed(kwargs['seed'])
+        try:
+            self.data = data
+            self.TRAIN_SPLIT = kwargs['TRAIN_SPLIT'] if 'TRAIN_SPLIT' in kwargs else 200
+            self.BATCH_SIZE = kwargs['BATCH_SIZE'] if 'BATCH_SIZE' in kwargs else 10
+            self.BUFFER_SIZE = kwargs['BUFFER_SIZE'] if 'BUFFER_SIZE' in kwargs else 20
+            self.EVALUATION_INTERVAL = kwargs['EVALUATION_INTERVAL'] if 'EVALUATION_INTERVAL' in kwargs else 5
+            self.EPOCHS = kwargs['EPOCHS'] if 'EPOCHS' in kwargs else 200
+            
+            # if 'seed' in kwargs:
+            #     tf.random.set_seed(kwargs['seed'])
 
-        if use_recent_model:
-            filename='model.h5'
-            # filename = kwargs['filename'] if 'filename' in kwargs else 'model.h5'
-            self.load_model(filename)
+            if use_recent_model:
+                filename='model.h5'
+                # filename = kwargs['filename'] if 'filename' in kwargs else 'model.h5'
+                self.load_model(filename)
+                
             
-        
-        else:
-            # Normalize the data
-            self. data = self.normalize(self.data)
-            
-            # Create windows
-            univariate_past_history = kwargs['univariate_past_history'] if 'univariate_past_history' in kwargs else 20
-            univariate_future_target = kwargs['univariate_future_target'] if 'univariate_future_target' in kwargs else 0
-            
-            x_train, y_train = self.univariate_data(0, self.TRAIN_SPLIT, univariate_past_history, univariate_future_target) # Training
-            x_test, y_test = self.univariate_data(self.TRAIN_SPLIT, None, univariate_past_history, univariate_future_target) # Testing
-            
-            shape = x_train.shape[-2:]
-            
-            # Creating training slices and shuffling them
-            train_univariate = tf.data.Dataset.from_tensor_slices((x_train, y_train))
-            self.train_univariate = train_univariate.cache().shuffle(self.BUFFER_SIZE).batch(self.BATCH_SIZE).repeat()
+            else:
+                # Normalize the data
+                self. data = self.normalize(self.data)
+                
+                # Create windows
+                univariate_past_history = kwargs['univariate_past_history'] if 'univariate_past_history' in kwargs else 20
+                univariate_future_target = kwargs['univariate_future_target'] if 'univariate_future_target' in kwargs else 0
+                
+                x_train, y_train = self.univariate_data(0, self.TRAIN_SPLIT, univariate_past_history, univariate_future_target) # Training
+                x_test, y_test = self.univariate_data(self.TRAIN_SPLIT, None, univariate_past_history, univariate_future_target) # Testing
+                
+                shape = x_train.shape[-2:]
+                
+                # Creating training slices and shuffling them
+                train_univariate = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+                self.train_univariate = train_univariate.cache().shuffle(self.BUFFER_SIZE).batch(self.BATCH_SIZE).repeat()
 
-            # Creating testing slices and shuffling them
-            test_univariate = tf.data.Dataset.from_tensor_slices((x_test, y_test))
-            self.test_univariate = test_univariate.batch(self.BATCH_SIZE).repeat()
-            
-            # Create the model
-            self.model = self.create_model(shape)
-            
-            # Fit the model
-            self.train_model()
-            
-            # Save model
-            filename = 'model.h5'
-            self.save_model(filename,)
-            
-            # Make predictions
-            for x, y in self.test_univariate.take(10):
-                plot = self.show_plot([x[0].numpy(), y[0].numpy(),
-                            self.model.predict(x)[0]], 0, 'Simple LSTM model')
-                plot.show()
-            
+                # Creating testing slices and shuffling them
+                test_univariate = tf.data.Dataset.from_tensor_slices((x_test, y_test))
+                self.test_univariate = test_univariate.batch(self.BATCH_SIZE).repeat()
+                
+                # Create the model
+                self.model = self.create_model(shape)
+                
+                # Fit the model
+                self.train_model()
+                
+                # Save model
+                filename = 'model.h5'
+                self.save_model(filename,)
+                
+                # Make predictions
+                for x, y in self.test_univariate.take(10):
+                    plot = self.show_plot([x[0].numpy(), y[0].numpy(),
+                                self.model.predict(x)[0]], 0, 'Simple LSTM model')
+                    plot.show()
+        except Exception as e:
+            print(e)    
             
             
     # Training the model
@@ -92,12 +94,12 @@ class uni_lstm:
         if filename is None:
             filename = 'model.h5'
         
-        self.model = tf.keras.models.load_model(filename)
+        self.model = keras.models.load_model(filename)
     
     def create_model(self, shape):
-        model =  tf.keras.models.Sequential([
-                    tf.keras.layers.LSTM(8, input_shape=shape),
-                    tf.keras.layers.Dense(1)
+        model =  keras.models.Sequential([
+                    keras.layers.LSTM(8, input_shape=shape),
+                    keras.layers.Dense(1)
                     ])
         model.compile(optimizer='adam', loss='mae')
         return model

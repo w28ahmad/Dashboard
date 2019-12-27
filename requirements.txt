@@ -6,7 +6,7 @@ pandas
 pandas_datareader
 pymongo
 matplotlib
-tensorflow==2.0.0b1
+tensorflow==1.5.0
 tweepy
 nltk
 tweet-preprocessor
@@ -26,3 +26,4 @@ dnspython
 cython
 git+https://github.com/thtrieu/darkflow.git
 opencv-python
+keras==2.1.5

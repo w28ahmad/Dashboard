@@ -1,7 +1,7 @@
 # Todo:
 
+- Fix lstm prediction
 - Research CNN's
-- implement darkflow object detection
 - Create a multi-variant lstm
 - make sure the lstm univariate model is picked from the right place
 - make the prediction n value dynamic
@@ -30,7 +30,7 @@
 # Done:
 
 - CNN Image upload
-
+- implement darkflow object detection
 - Create a cnn page
 - predicting when to swich to different stocks
 - for the sentiment analysis make sure the env variables are accessed from the right place
