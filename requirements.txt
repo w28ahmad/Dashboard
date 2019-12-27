@@ -25,3 +25,4 @@ mysqlclient==1.3.10
 dnspython
 cython
 git+https://github.com/thtrieu/darkflow.git
+opencv-python

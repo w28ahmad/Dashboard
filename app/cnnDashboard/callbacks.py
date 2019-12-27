@@ -2,7 +2,7 @@ from dash.dependencies import Input, Output, State
 import dash_html_components as html
 import plotly
 import plotly.graph_objs as go
-
+from .detection import setup_image_directory, save_as_jpg, image_prediction
 import datetime
 
 # from webapp.app.config import BASEDIR
@@ -12,6 +12,8 @@ from cnnDashboard.style import app_colors
 
 def register_callbacks(dashapp):
     def parse_contents(contents, filename, date):
+        setup_image_directory()
+        save_as_jpg(filename, contents)
         return html.Div([
         html.P(filename),
         html.P(datetime.datetime.fromtimestamp(date)),
