@@ -26,3 +26,5 @@ dbTest
 
 venv
 tests
+*.jpg
+yolo.weights
