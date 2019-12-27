@@ -1,7 +1,7 @@
 # Todo:
 
-- CNN Image upload
 - Research CNN's
+- implement darkflow object detection
 - Create a multi-variant lstm
 - make sure the lstm univariate model is picked from the right place
 - make the prediction n value dynamic
@@ -28,6 +28,8 @@
 - following multiple stocks
 
 # Done:
+
+- CNN Image upload
 
 - Create a cnn page
 - predicting when to swich to different stocks
