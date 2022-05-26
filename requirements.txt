@@ -6,7 +6,7 @@ pandas
 pandas_datareader
 pymongo
 matplotlib
-tensorflow==2.5.1
+tensorflow==2.7.2
 tweepy
 nltk
 tweet-preprocessor
